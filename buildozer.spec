@@ -9,10 +9,10 @@ requirements = python3,kivy,Pillow,android
 orientation = portrait
 fullscreen = 0
 android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
-android.api = 33
+android.api = 28
 android.minapi = 21
 android.ndk = 25b
-android.sdk = 33
+android.sdk = 28
 android.arch = arm64-v8a
 p4a.branch = develop
 [buildozer]
