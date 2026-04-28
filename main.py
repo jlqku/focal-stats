@@ -28,13 +28,13 @@ class FocalStatsApp(App):
 
         btn_box = BoxLayout(size_hint=(1, 0.1), spacing=10)
         self.btn_auto = Button(
-            text='\u81ea\u52a8\u626b\u63cf',
+            text='自动扫描',
             font_size='18sp',
             background_color=(0.2, 0.6, 0.8, 1)
         )
         self.btn_auto.bind(on_press=self.start_analysis)
         self.btn_manual = Button(
-            text='\u624b\u52a8\u9009\u62e9',
+            text='手动选择',
             font_size='18sp',
             background_color=(0.2, 0.7, 0.5, 1)
         )
@@ -66,7 +66,7 @@ class FocalStatsApp(App):
         self.layout.add_widget(filter_box)
 
         self.status = Label(
-            text='\u70b9\u51fb\u6309\u94ae\u5f00\u59cb\u5206\u6790\u7167\u7247\u7126\u6bb5\uff0c\u53ef\u9009\u586b\u65e5\u671f\u8fc7\u6ee4',
+            text='点击按钮开始分析照片焦段，可选填日期过滤',
             font_size='14sp',
             size_hint=(1, 0.06)
         )
@@ -121,19 +121,19 @@ class FocalStatsApp(App):
                     popup.dismiss()
                     self.start_analysis_manual(selected)
                 else:
-                    path_label.text = '\u8bf7\u9009\u62e9\u6587\u4ef6\u5939\uff0c\u4e0d\u662f\u6587\u4ef6'
+                    path_label.text = '请选择文件夹，不是文件'
             else:
-                path_label.text = '\u8bf7\u5148\u9009\u62e9\u6587\u4ef6\u5939'
+                path_label.text = '请先选择文件夹'
 
-        select_btn = Button(text='\u9009\u62e9\u6b64\u6587\u4ef6\u5939')
+        select_btn = Button(text='选择此文件夹')
         select_btn.bind(on_press=on_select)
-        cancel_btn = Button(text='\u53d6\u6d88')
+        cancel_btn = Button(text='取消')
         cancel_btn.bind(on_press=lambda x: popup.dismiss())
         btn_box.add_widget(select_btn)
         btn_box.add_widget(cancel_btn)
         content.add_widget(btn_box)
         popup = Popup(
-            title='\u9009\u62e9\u76f8\u518c\u6587\u4ef6\u5939',
+            title='选择相册文件夹',
             content=content,
             size_hint=(0.95, 0.95),
             auto_dismiss=False
@@ -210,7 +210,7 @@ class FocalStatsApp(App):
                 debug_lines.append(f'\u904d\u5386\u4e86 {walked_dirs} \u4e2a\u5b50\u76ee\u5f55')
                 debug_lines.append(f'\u7b5b\u9009\u540e\u7167\u7247: {len(files)} \u5f20')
             else:
-                debug_lines.append('\u6587\u4ef6\u5939\u8def\u5f84\u65e0\u6548\uff0c\u5206\u6790\u7ed3\u675f')
+                debug_lines.append('文件夹路径无效，分析结束')
                 self.update_result('\n'.join(debug_lines))
                 return
             self.analyze_with_files(files, debug_prefix='\n'.join(debug_lines) + '\n')
@@ -224,7 +224,7 @@ class FocalStatsApp(App):
             self.update_status(f'\u627e\u5230 {len(files)} \u5f20\u7167\u7247\uff0c\u5206\u6790\u4e2d...')
             date_from, date_to = self.parse_date_range()
             if date_from or date_to:
-                self.update_status(f'\u542f\u7528\u65e5\u671f\u8fc7\u6ee4: {date_from.date() if date_from else "\u65e0\u9650"} ~ {date_to.date() if date_to else "\u65e0\u9650"}')
+                self.update_status(f'\u542f\u7528\u65e5\u671f\u8fc7\u6ee4: {date_from.date() if date_from else "无限"} ~ {date_to.date() if date_to else "无限"}')
 
             focal_data = []  # [(focal, filename, dt), ...]
             for i, f in enumerate(files):
@@ -253,11 +253,11 @@ class FocalStatsApp(App):
                 lines.append(f'\u81ea\u52a8\u626b\u63cf\u8def\u5f84: {auto_paths}')
                 lines.append('')
             if date_from or date_to:
-                lines.append(f'\u65e5\u671f\u8fc7\u6ee4: {date_from.date() if date_from else "\u4e0d\u9650"} ~ {date_to.date() if date_to else "\u4e0d\u9650"}')
+                lines.append(f'\u65e5\u671f\u8fc7\u6ee4: {date_from.date() if date_from else "不限"} ~ {date_to.date() if date_to else "不限"}')
                 lines.append('')
 
             if not filtered:
-                lines.append('\u672a\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7167\u7247')
+                lines.append('未找到符合条件的照片')
                 lines.append('\u53ef\u80fd\u539f\u56e0: \u65e5\u671f\u8fc7\u6ee4\u8303\u56f4\u592a\u7a84 / EXIF\u65e5\u671f\u4e22\u5931 / \u6ca1\u6709\u5b58\u50a8\u6743\u9650')
                 self.update_result('\n'.join(lines))
                 return
@@ -325,7 +325,7 @@ class FocalStatsApp(App):
         for label, check in bins:
             count = sum(1 for f in focals if check(f))
             pct = count / total * 100
-            bar = '\u2588' * int(pct / 2.5)
+            bar = '█' * int(pct / 2.5)
             lines.append(f'{label:14s}: {count:4d}\u5f20 ({pct:5.1f}%) {bar}')
 
         lines.append('')
