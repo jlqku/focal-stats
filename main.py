@@ -169,13 +169,18 @@ class FocalStatsApp(App):
             debug_lines.append(f'\u8def\u5f84\u662f\u5426\u5b58\u5728: {os.path.exists(folder) if folder else False}')
 
             files = []
+            last_dir = ''
             if folder and os.path.exists(folder):
                 walked_dirs = 0
                 for root, _, fnames in os.walk(folder):
                     walked_dirs += 1
+                    last_dir = root
+                    if walked_dirs % 10 == 0:
+                        self.update_status(f'\u6b63\u5728\u626b\u63cf: {root} ({walked_dirs} \u4e2a\u76ee\u5f55)...')
                     for f in fnames:
                         if f.lower().endswith(('.jpg', '.jpeg', '.png', '.heic', '.raf', '.dng')):
                             files.append(os.path.join(root, f))
+                debug_lines.append(f'\u6700\u540e\u626b\u63cf\u7684\u76ee\u5f55: {last_dir}')
                 debug_lines.append(f'\u904d\u5386\u4e86 {walked_dirs} \u4e2a\u5b50\u76ee\u5f55')
                 debug_lines.append(f'\u7b5b\u9009\u540e\u7167\u7247: {len(files)} \u5f20')
             else:
