@@ -1,3 +1,6 @@
+from kivy.core.text import LabelBase
+LabelBase.register(name='Roboto', fn_regular='NotoSansCJK-Regular.ttc')
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
